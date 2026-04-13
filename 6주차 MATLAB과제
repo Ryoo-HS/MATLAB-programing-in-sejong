@@ -1,0 +1,182 @@
+문제 1번
+clc; clear;
+x = input('실수를 입력하세요. : ');
+function y = f1(x)
+    y = x.^2;
+end
+if x > 0
+    y = f1(x);
+    fprintf('1번의 답은 %d \n', y)
+elseif x <= 0
+    y = 0;
+    fprintf('1번의 답은 %d \n', y)
+end    
+
+문제 2번
+clc; clear;
+m = input('m은 정수입니다. m을 입력하세요. : ');
+switch m
+    case 1
+        disp('January')
+    case 2
+        disp('February')
+    case 3
+        disp('March')
+    case 4
+        disp('April')
+    otherwise
+        disp('invalid month')
+end
+
+문제 3번
+clc; clear;
+x = [3 -5 0 8 -2 4 -7]
+y =[]
+for k = 1:length(x)
+    if x(k) < 0
+        y = [y, x(k)];
+    end
+end
+a = length(y);
+fprintf('3번의 답은 %d개 \n', a)
+
+문제 4번
+clc; clear;
+x = [4 -9 0 16 -1 25];
+y = []
+for k = 1:length(x)
+    if x(k) > 0
+        a = sqrt(x(k));
+        y = [y a];
+    elseif x(k) == 0
+        y = [y 0];
+    else
+        a = abs(x(k));
+        y = [y a];
+    end
+end
+y
+
+문제 5번
+clc; clear;
+nums = input('두 수를 입력하세요. [a b] :');
+cmd = input('cmd를 입력하세요. : ','s');
+if nums(2) ~= 0
+    switch cmd
+        case 'add'
+            a = nums(1) + nums(2);
+            fprintf('a + b = %.2f \n', a)
+        case 'sub'
+            a = nums(1) - nums(2);
+            fprintf('a - b = %.2f \n', a)
+        case 'mul'
+            a = nums(1) * nums(2);
+            fprintf('a x b = %.2f \n', a)
+        case 'div'
+            a = nums(1) / nums(2)
+            fprintf('a / b = %.2f \n', a)
+        otherwise
+            disp('invalid command')
+    end
+elseif nums(2) == 0 
+    switch cmd
+        case 'add'
+            a = nums(1) + nums(2);
+            fprintf('a + b = %.2f \n', a)
+        case 'sub'
+            a = nums(1) - nums(2);
+            fprintf('a - b = %.2f \n', a)
+        case 'mul'
+            a = nums(1) * nums(2);
+            fprintf('a x b = %.2f \n', a)
+        case 'div'
+            a = nums(1) / nums(2)
+            disp('division by zero')
+        otherwise
+            disp('invalid command')
+    end
+end
+
+문제 6번
+clc; clear;
+n = input('양의 정수 n을 입력하세요. : ')
+a = 0
+for k = 1:n
+    if rem(k,3) == 0
+        if rem(k,2) == 1
+            a = a + k;
+        end
+    end
+end
+fprintf('6번의 답은 %d', a)
+
+문제 7번
+clc; clear;
+n = input('양의 정수 n을 입력하세요. : ')
+a =[]
+for k = 1:n
+    if rem(k,2) == 0
+        a = [a k.^3];
+    elseif rem(k,2) == 1
+        a = [a k.^2];
+    end
+end
+
+disp(a)
+
+문제 8번
+clc; clear;
+price = [19 18 22 21 25 19 17 21 27 29];
+a = 1000;
+pay = 0
+earn = 0
+for k = 1:10
+    if price(k) < 20
+        a = a + 100
+        pay = pay - 100*price(k)
+    elseif price(k) > 25
+        a = a - 100
+        earn = earn + 100*price(k)
+    end
+end
+pay_plus = pay *-1
+disp('(a)의 답')
+disp(pay_plus)
+disp('(b)의 답')
+disp(earn)
+disp('(c)의 답')
+disp(a)
+disp('(d)의 답')
+total = earn + pay;
+disp(total)
+% (d)에 대해 포트폴리오에서 첫날의 1000주의 가치와 마지막날
+% 1200주에 해당하는 가치는 생각하지 않고 계산하라고 하셔서 이런 답이
+% 도출되었습니다.
+% 만약 첫날, 마지막날에 해당하는 n주에 해당하는 가치를 생각한다면,
+% 시작 : 1000주 19$, 마지막날 : 1200주 29$ + (얻은금액 - 소비한금액)
+% 14100이 (d)에 대한 답임.
+
+문제 9번
+clc; clear;
+a = input('전기 연결의 형태(직렬 or 병렬)','s');
+b = input('저항의 개수 : ')
+d= []
+e= []
+
+switch a
+    case '직렬'
+        for k = 1:b
+            c = input('각 저항값 : ')
+            d = [d c];
+        end
+        sum(d)
+    case '병렬'
+        for k = 1:b
+            c= input('각 저항값 :')
+            d = [d 1/c];
+        end
+        sum(d)
+end
+
+
+        
