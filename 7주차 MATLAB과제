@@ -1,0 +1,167 @@
+과제6
+1번
+n = input("자연수 n을 입력하세요");
+a=0;
+while n >0
+    a = a + n;
+    n = n -1;
+end
+a
+
+2번
+n = input("자연수 n을 입력하세요");
+for k = 1:n
+    if rem(k,2) == 0
+        disp(k)
+    end
+end
+
+
+3번
+x = 0:0.1:2*pi;
+y = sin(x);
+plot(x,y)
+xlabel("0<x<2pi")
+ylabel("y = sin(x)")
+title("sin(x)그래프")
+grid on;
+
+4번
+x = 0:0.01:2*pi;
+y1 = sin(x);
+y2 = cos(x);
+plot(x,y1,x,y2)
+legend("sin(x)","cos(x)")
+grid on
+
+5번
+a5 = load("monthly_temp.txt");
+month = a5(:,1);
+temp = a5(:,2);
+plot(month, temp)
+title("monthly temp")
+xlabel("월")
+ylabel("온도")
+grid on
+
+6번
+a6 = load("motion.data.txt");
+time = a6(:,1);
+dist = a6(:,2);
+plot(time,dist,'o')
+title("거리변화그래프")
+xlabel("time")
+ylabel("dist")
+
+7번
+a7 = [1 1]
+n7 = input("자연수 n을 입력하세요")
+while a7(end) < n
+    q = a7(end) + a7(end-1);
+    a7 =[a7 q]
+end
+
+8번
+x =0:pi/50:2*pi;
+
+y1 = sin(x);
+y2 = sin(2.*x);
+subplot(2,1,1)
+plot(x,y1)
+subplot(2,1,2)
+plot(x,y2)
+
+
+9번
+x = 100;
+a=[x];
+while x~=1
+    if rem(x,2) == 0
+        x = x/2;
+        a=[a x];
+    else
+        rem(x,2) ~= 0
+        x = 3*x + 1;
+        a= [a x];
+    end
+end
+a
+
+
+10번
+theta = 0:0.01:pi/2;
+r1 = 50.^2.*sin(2.*theta)./9.8;
+r2 = 100.^2.*sin(2.*theta)./9.8;
+
+plot(theta,r1,theta,r2)
+legend("r1","r2")
+xlabel("0<theta<pi/2")
+ylabel("sin식들")
+
+
+11번
+x = 0:0.1:pi;
+y = sin(x);
+
+%항복/ 답을 봐도 모르겠습니다
+
+12번
+x = 0:0.01:2*pi;
+y1 = sin(x);
+y2 = cos(x);
+y3 = sin(2.*x);
+y4 = cos(2.*x);
+subplot(2,2,1)
+grid on
+plot(x,y1)
+title("sinx")
+subplot(2,2,2)
+plot(x,y2)
+title("cosx")
+subplot(2,2,3)
+plot(x,y3)
+title('sin2x')
+subplot(2,2,4)
+plot(x,y4)
+title("cos2x")
+clf
+
+13번
+v1 = 0.98;
+a =[0 v1]
+g= 9.8;
+c = 0.1;
+t =0.1;
+time = [0 0.1]
+while a(end)-a(end-1) > 0.001
+    v1 = v1 + (g-c*v1)*t;
+    t = t+ 0.1;
+    a= [a v1];
+    time = [time t];
+    
+end
+a;
+time;
+plot(time,a)
+title("13번")
+xlabel("time")
+ylabel("속도변화")
+
+14번
+x = cos(1);
+n1= [0 1];
+n= 1;
+a = [0 cos(1)];
+while abs(a(end)-a(end-1))
+    x = cos(x);
+    n = n + 1;
+    n1 = [n1 n];
+    a = [a x];
+end
+n1;
+a;
+plot(n1,a)
+legend("cos(x)의 누적 그래프")
+y_last = a(end);
+y_last
+yline(y_last, '--r','Label',"수렴")
