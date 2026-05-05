@@ -1,0 +1,254 @@
+1번
+x = 0:0.05:6*pi;
+
+y = sin(x) + 0.5*cos(3.*x);
+
+plot(x,y);
+xticks(0:pi:6*pi)
+title("1번")
+xlabel("x")
+ylabel("y")
+grid on
+
+2번
+x = 1:1:50;
+y = 3.^x;
+
+subplot(1,2,1)
+plot(x,y)
+subplot(1,2,2)
+semilogy(x,y)
+grid on
+% 일반 plot은 지수함수의 특성을 잘 보여주고 있고
+% semilogy는 y축을 로그로 나타내어서 지수함수를 직선식으로 나타내고 있다.
+
+3번
+clc;clear
+%score = [72, 85, 91, 66, 78, 88, 95, 54, 60, 73, 82, 90, 69, 77, 84, 92, 58, 63, 79, 87];
+
+% save('score.dat', 'score', '-ascii')을 통해 score 만들고 저장
+load score.dat
+
+subplot(1,2,1)
+hist(score,5)
+subplot(1,2,2)
+hist(score,10)
+clf
+
+4번
+clf; clc; clear
+q = @(x) sin(x).*exp(-0.1.*x);
+
+fplot(q, [0 10.*pi])
+title("4번")
+xlabel("x")
+ylabel("y")
+grid on
+
+5번
+x = 0:0.1:10;
+y1 = x.^2;
+y2 = exp(0.5.*x);
+
+plotyy(x,y1,x,y2)
+title("5번")
+xlabel("same X")
+% 현재는 제곱이라 x.^2이 더 크지만, exp(0.5*x)는 지수함수의 지수가 커지는
+% 형태이기 때문에 증가폭이 나중에 가면 더 커진다.
+
+6번
+t = 0:0.02:12*pi;
+
+xt = (1 + 0.03.*t).*cos(t);
+yt = (1 + 0.03.*t).*sin(t);
+zt = 0.2.*t;
+
+plot3(xt,yt,zt)
+title("6번")
+xlabel("x")
+ylabel("y")
+zlabel("z")
+grid on
+
+
+7번
+x = -4:0.01:4;
+y = -4:0.01:4;
+[X ,Y] = meshgrid(x,y);
+Z = X.^2 -Y.^2;
+mesh(X,Y,Z)
+
+% saddle surface(안장형 곡면)의 형태가 맞다
+
+8번
+x = -2*pi:0.01:2*pi;
+y = -2*pi:0.01:2*pi;
+
+[X,Y] = meshgrid(x,y);
+Z = sin(X).*cos(Y);
+
+subplot(1,2,1)
+mesh(X,Y,Z)
+subplot(1,2,2)
+contour(X,Y,Z)
+
+%contour그래프는 함수의 높이값을 선으로 표현한 것(같은 함수값들을 가지는 점들을 연결한 선)
+
+9번
+clf;clc;clear;
+t = 0:0.1:25;
+
+yt = exp(-0.15.*t).*cos(4.*t);
+
+%(a)
+figure
+plot(t,yt)
+
+%(b)
+figure
+plot(t, exp(-0.15.*t))
+hold on
+plot(t, -exp(-0.15.*t)) 
+hold off
+
+%(c)
+figure
+semilogy(t,abs(yt))
+% 감쇠가 로그 수준에서는 일정하게 감소되는 것을 보인다.
+
+10번
+x = -6:0.01:6;
+y = -6:0.01:6;
+[X , Y] = meshgrid(x,y);
+Z = cos(X).*sin(Y).*exp(-0.05.*(X.^2 + Y.^2));
+
+mesh(X,Y,Z)
+contour(X,Y,Z)
+
+z_max = max(Z(:))
+[row, col] = find(Z == z_max)
+
+
+11번
+t = [0 1 2 3 4 5 6];
+C = [12 8.9 6.6 4.9 3.6 2.7 2.0];
+
+%(a)
+plot(t,C)
+
+%(b)
+semilogy(t,C)
+
+%(c)
+% t =6일때로 기울기 측정
+c = C(6);
+
+k = log(12/c)/6 
+
+
+12번
+n = 1:1:30;
+t1 = n;
+t2 = n.*log10(n);
+t3 = n.^2;
+t4 = 2.^n;
+%(a)
+figure
+plot(n,t1)
+hold on
+plot(n,t2)
+plot(n,t3)
+plot(n,t4)
+hold off
+
+%(b)
+figure
+semilogy(n,t1)
+hold on
+semilogy(n,t2)
+semilogy(n,t3)
+semilogy(n,t4)
+hold off
+
+%(c)
+로그 스케일 그래프가 더 적절하다. 일반 스케일은 지수함수 등의 증가폭이 너무 크다.
+하지만 로그스케일은 그 증가폭을 직선형태로 바꾸어준다.
+
+16번
+t = 0:0.01:24;
+T = 15 + 10.*(sin((pi.*t)/12));
+
+plot(t,T)
+[Tmax, idx_max] = max(T);
+[Tmin, idx_min] = min(T);
+
+t_max = t(idx_max);
+t_min = t(idx_min);
+text(t_max, Tmax, '  max')
+text(t_min, Tmin, '  min')
+
+
+17번
+t = 0:0.01:20;
+v = 5.*exp(-0.2.*t);
+%(a)
+plot(t,v)
+
+%(b)
+semilogy(t, v)
+
+%(c)
+%지수함수의 형태인 곡선이 직선의 형태로 표현되었다.
+
+18번
+A = [4 -1 2; 1 3 -1; 2 -2 5];
+b = [7;4;10];
+%(a)
+A.^2
+A^2
+%A.^2는 원소별 곱셈. A^2은 행렬곱
+
+%(b)
+det(A)
+%값이 0이 아니기 때문에 역행렬 존재
+
+%(c)
+inv(A)*b
+A\b
+%결과가 동일하게 나온다. A\b는 연립형식으로 풀고, inv는 역행렬 포함 식. 오래걸림
+
+%(d)
+A\b
+
+19번
+A = [2 -1; 3 4]; B = [1 0 -2; 3 5 1]; C = [6 -3 4; 15 14 -1];
+
+%(a)
+X = A\(C-B)
+
+%(b)
+A\(C-B)
+
+%(c)
+A*X + B
+%위 결과가 C와 동일. 만족한다.
+
+%(d)
+%inv는 역행렬을 포함한 계산이라 시간이 오래 걸린다.
+%그렇기 때문에 연립방정식 형태인 계산으로 수행하면 연산시간이 짧아진다
+
+
+20번
+X = [3 7 2 5;5 9 4 6;8 12 7 10;10 15 9 13;14 18 12 16];
+
+%(a)
+mean(X)
+%(b)
+Xc = X - mean(X)
+
+%(c)
+S = Xc' * Xc
+
+%(d)
+% S의 대각원소 : 각 변수의 분산, 값이 클수록 퍼짐
+% S의 비대각원소 : 변소 간의 공분산, 변수들 간의 상관관계
