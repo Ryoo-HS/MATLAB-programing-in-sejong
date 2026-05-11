@@ -1,0 +1,256 @@
+문제1
+t = 0 : 0.01 : 30;
+f = exp(-0.12*t) .* sin(5*t) + 0.3*cos(2*t);
+%(a)
+figure
+plot(t,f)
+
+u = exp(-0.12*t) + 0.3;
+l = -exp(-0.12*t) - 0.3;
+hold on
+%(b)
+plot(t,u)
+plot(t,l)
+%(c)
+k = find(f(2:end-1) > f(1:end-2) & f(2:end-1) > f(3:end)) + 1;
+%(d)
+plot(t(k), f(k), 'ko', 'MarkerSize', 8, 'MarkerFaceColor', 'y');
+%(e)
+result = [k ; f(k)]'
+hold off
+
+문제2
+
+x = -5:0.05:5; y = -5:0.05:5;
+
+[X Y] = meshgrid(x,y);
+Z = sin(X.*Y)./(1 + X.^2 + Y.^2);
+%(a)
+Z;
+%(b)
+figure
+mesh(X,Y,Z)
+%(c)
+contour(X,Y,Z,25)
+%(d) 
+M = max(abs(Z(:)))
+
+
+%(e)
+[~, idx] = max(abs(Z(:)));           
+[row, col] = ind2sub(size(Z), idx);  
+x_pos = x(col)                   
+y_pos = y(row)                     
+
+
+문제3
+A = [7 2 1; 2 6 -2;1 -2 5];
+%(a)
+[V D] = eig(A)
+%(b)
+diag(D)
+%(c)
+M = max(max(D))
+[row col] = find(M == D)
+%(d)
+v = V(:, col)
+%(e)
+v_unit = v / norm(v) 
+%(f)
+A*v - M*v
+%10^-14가 있기 때문에 0백터에 가깝다고 볼 수 있다.
+
+문제4
+X = [2 5 1;4 8 3;6 11 7;9 15 10;13 20 14];
+%(a)
+mean(X)
+%(b)
+Xc = X-mean(X)
+%(c)
+S = Xc'*Xc
+%(d)
+[V, D] = eig(S)
+%(e)
+M = max(max(D))
+%(f)
+[row col] = find(M == D);
+V(:, col)
+
+문제5
+%(a)
+A = [5 2 -1; -2 6 3; 1 -1 7];
+b = [8; 5; 12];
+%(b)
+x1 = inv(A)*b
+%(c)
+x2 = A\b
+%(d)
+x1-x2  %둘이 같음
+
+%(e)
+det(A)
+"det(A) = 263 ≠ 0 이므로 A는 가역행렬이다."
+%3가지 평면의 방정식이(평면이) 한 점에서만 만난다는 의미
+
+문제6
+%(a)
+x = -6:0.05:6; y = -6:0.05:6;
+[X,Y] = meshgrid(x,y);
+
+Z = exp(-0.08.*(X.^2 + Y.^2)).*cos(3.*X).*sin(2.*Y);
+%(b)
+surf(X,Y,Z)
+%(c)
+contour(X,Y,Z,30)
+%(d)
+M = max(Z(:))
+m = min(Z(:))
+%(e)
+[~, idx_max] = max(Z(:));
+[row_max, col_max] = ind2sub(size(Z), idx_max);
+x_max = x(col_max);
+y_max = y(row_max);
+
+fprintf("최댓값 x,y (%.2f, %.2f) \n",x_max, y_max)
+
+[~, idx_min] = min(Z(:));
+[row_min, col_min] = ind2sub(size(Z), idx_min);
+x_min = x(col_min);
+y_min = y(row_min);
+fprintf("최소값 x,y (%.2f, %.2f) \n",x_min, y_min)
+
+
+문제7
+n = [50 100 200 400 800 1600];
+T = [14 19 30 51 92 170];
+
+%(a)
+plot(n,T,'o-')
+%(b)
+semilogx(n,T,'o-')
+%(c)
+semilogy(n,T,'o-')
+%(d)
+figure
+subplot(1,3,1)
+plot(n,T,'o-')
+subplot(1,3,2)
+semilogx(n,T,'o-')
+subplot(1,3,3)
+semilogy(n,T,'o-')
+clf
+
+%(e)
+"semilogx 그래프(b)에서 점들이 가장 직선에 가깝게 보인다."
+% (plot(n,T,'o-'))
+
+문제 8
+t = 0:0.01:24;
+pt = 50 + 18.*sin(pi.*t./12) + 6.*cos(pi.*t./4);
+
+%(a)
+plot(t,pt)
+
+%(b)
+[pt_max, q] = max(pt);
+pt_max
+%(c)
+time_max = t(q) 
+
+%(d)
+[pt_min,q] = min(pt);
+pt_min
+time_min = t(q)
+
+%(e)
+hold on
+plot(time_max, pt_max, 'r^', 'MarkerSize', 10, 'MarkerFaceColor', 'r');  % 최대: 빨간 삼각형
+plot(time_min, pt_min, 'bs', 'MarkerSize', 10, 'MarkerFaceColor', 'b');  % 최소: 파란 사각형
+hold off;
+
+문제9번
+X = [1 3 0;2 5 1;4 8 3;7 12 5;11 17 9];
+%(a)
+x1 = X(:,1)
+x2 = X(:,2)
+x3 = X(:,3)
+
+%(b)
+degree_b = dot(x1,x2)/(norm(x1)*norm(x2));
+theta_b = acosd(degree_b)
+
+%(c)
+degree_c1 = dot(x1,x3) / (norm(x1) * norm(x3));
+theta_c1 = acosd(degree_c1)
+
+degree_c2 = dot(x2,x3) / (norm(x2) * norm(x3));
+theta_c2 = acosd(degree_c2)
+
+%(d)
+theta_d = [theta_b, theta_c1, theta_c2]
+
+%(e)
+[min_theta, idx] = min(theta_d);
+min_theta
+
+sensor_pairs = [1 2; 1 3; 2 3];
+pair = sensor_pairs(idx,:)
+
+문제10
+%(a) 
+A = [9 -2 -1;-2  8 -3;-1 -3 10];
+b = [15; 7; 11];
+
+%(b)
+I = A\b
+
+%(c)
+det(A)
+"det(A) = 579 ≠ 0 이므로 A는 가역행렬이다."
+
+%(d)
+abs(I)
+
+%(e)
+[max_I, idx] = max(abs(I))
+
+
+문제11
+t = 0:0.01:40;
+yt = exp(-0.04.*t).*(sin(4.*t) + 0.6.*sin(9.*t));
+%(a)
+yt;
+plot(t,yt)
+
+%(b)
+ut = 1.6.*exp(-0.04.*t); lt = -1.6.*exp(-0.04.*t);
+
+%(c)
+hold on
+plot(t,ut)
+plot(t,lt)
+hold off
+
+%(d)
+semilogy(t, abs(yt))
+
+%(e)
+ut_0  = 1.6 * exp(-0.04 * 0)
+ut_40 = 1.6 * exp(-0.04 * 40)
+
+문제12
+epoch = [1 2 5 10 20 50 100 200];
+loss = [3.1 2.4 1.7 1.2 0.83 0.36 0.14 0.06];
+
+%(a)
+plot(epoch, loss, 'o-')
+%(b)
+semilogy(epoch, loss, 'o-')
+%(c)
+rk =  loss(2:end)./loss(1:end-1)
+
+%(d)
+mean(rk)
+
+%(e)
+"평균 비율이 1보다 작은 약 0.6이기 때문에 loss는 감소하고 있다."
