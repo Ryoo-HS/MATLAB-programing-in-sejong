@@ -1,0 +1,245 @@
+%문제1
+%(A)
+Hour    = [6; 7; 8; 9; 10; 11; 12; 13; 14; 15; 16; 17];
+SolarGen = [0.5; 1.2; 2.4; 3.8; 4.6; 5.1; 5.4; 5.0; 4.2; 3.0; 1.7; 0.8];
+Demand   = [1.8; 2.0; 2.3; 2.7; 3.1; 3.4; 3.8; 4.0; 3.7; 3.4; 3.0; 2.5];
+Battery  = [3.2; 3.0; 3.1; 3.8; 4.5; 5.2; 5.9; 6.3; 6.5; 6.1; 5.4; 4.7];
+%(B)
+A = [Hour SolarGen Demand Battery]
+%(C)
+writematrix(A,"solar_system.txt")
+%(D)
+B = load("solar_system.txt")
+%(E)
+hour = B(:,1)
+solar = B(:,2)
+demand = B(:,3)
+battery = B(:,4)
+%(F)
+netPower = solar - demand
+%(G)
+plot(hour,netPower)
+
+%문제2
+clc;clear;
+%(A)
+D = [1  2.1  8  12; 2  3.4  13  19;...
+     3  1.8   7  10; 4  5.2  21  31;...
+     5  4.7  19  28; 6  6.0  25  36;...
+     7  3.1  12  18; 8  5.8  24  35];
+%(B)
+writematrix(D,"drone_delivery.txt")
+drone = load("drone_delivery.txt")
+%(C)
+DistanceKm = drone(:,2)
+TimeMin = drone(:,3)
+BatteryUsed = drone(:,4)
+%(D)
+speed = DistanceKm ./ TimeMin
+%(E)
+BatteryPerKm = BatteryUsed ./ DistanceKm
+%(F)
+idx = find(BatteryPerKm > 6)
+result = [drone(idx,1), DistanceKm(idx), BatteryPerKm(idx)]
+
+%문제3
+clc;clear;
+%(A)
+Zone     = {'Z1';'Z2';'Z3';'Z4';'Z5';'Z6';'Z7';'Z8'};
+Temp     = [22.5;24.1;21.8;25.3;23.7;26.0;22.9;24.8];
+Humidity = [61;58;67;55;62;53;65;57];
+Light    = [420;460;390;520;480;550;410;500];
+CO2      = [510;540;495;610;575;640;520;600];
+
+%(B)
+Farm = table(Zone, Temp, Humidity, Light, CO2)
+%(C)
+Farm.EnvIndex = 0.4*Farm.Temp + 0.01*Farm.Light + 0.02*Farm.CO2
+%(D)
+HighEnv = Farm(Farm.EnvIndex >= 25,:)
+%(E)
+HighEnv(:,{'Zone','Temp','Light','EnvIndex'})
+
+%문제4
+clc;clear;
+%(A)
+Machine   = {'M1';'M2';'M3';'M4';'M5';'M6';'M7';'M8';'M9';'M10'};
+Vibration = [1.8;2.4;1.5;3.1;2.7;1.9;3.5;2.2;1.6;2.9];
+Temp      = [68;72;65;78;74;69;82;71;66;76];
+Power     = [4.5;5.1;4.2;6.3;5.7;4.8;6.8;5.0;4.4;6.0];
+Defect    = [2;5;1;8;6;3;10;4;1;7];
+
+Factory = table(Machine, Vibration, Temp, Power, Defect)
+%(B)
+Factory.RiskScore = Vibration .* Temp ./ Power
+%(C)
+RiskMachines = Factory(Factory.RiskScore >= 35 & Factory.Defect >= 6, :)
+%(D)
+RiskMachines(:,{'Machine','RiskScore','Defect'})
+%(E)
+writetable(Factory,"factory_risk.csv")
+
+%문제5
+clc;clear;
+%(A)
+url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data'
+%(B)
+T = readtable(url,'FileType','text','ReadVariableNames',false)
+%(C)
+T.Properties.VariableNames = {'Sex','Length','Diameter','Height',...
+    'WholeWeight','ShuckedWeight','VisceraWeight','ShellWeight','Rings'};
+T
+%(D)
+T(:,{'WholeWeight', 'ShellWeight', 'Rings'})
+%(E)
+OldMale = T(strcmp(T.Sex,'M') & T.Rings >= 15, :)
+%(F)
+OldMale(:,{'Sex', 'Length', 'WholeWeight', 'Rings'})
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%문제6
+%(A)
+% 문제5의 T를 사용하기 위해 셀분할 하지 않음
+%(B)
+T.ShellRatio = T.ShellWeight ./ T.WholeWeight
+
+%(C)
+Hardshell = T(T.ShellRatio >= 0.25 & T.Rings >= 12, :)
+
+%(D)
+Hardshell(:,{'Sex', 'WholeWeight', 'ShellWeight', 'ShellRatio', 'Rings'})
+%(E)
+ratioData = T(:,{'ShellRatio'})
+
+%문제7
+%(A)
+url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv'
+%(B)
+T = readtable(url, "Filetype",'text','ReadVariableNames',true)
+%(C)
+T.temp;
+T.RH;
+T.wind;
+T.rain;
+T.area;
+%(D)
+HotDryFries = T(T.temp >= 25 & T.RH <=35,:)
+%(E)
+HotDryFries(:,{'month', 'day', 'temp', 'RH', 'wind', 'area'})
+
+
+
+%문제8
+%(A)
+Fire = T;
+%(B)
+Fire.RiskIndex = Fire.temp .* Fire.wind ./ Fire.RH
+%(C)
+RiskFire = Fire(Fire.RiskIndex >= 2 & Fire.area > 0,:)
+%(D)
+RiskFire(:,{'month', 'day', 'temp', 'RH', 'wind', 'area', 'RiskIndex'})
+%(E)
+writetable(RiskFire, 'forest_risk.csv')
+
+%문제9
+%dataset이 다른data인것 같아 url로 data참고하였습니다. 
+%(A)
+url = 'https://raw.githubusercontent.com/mcnakhaee/palmerpenguins/master/palmerpenguins/data/penguins.csv';
+websave('penguins.csv', url);
+P = readtable('penguins.csv')
+%(B)
+P.Properties.VariableNames
+%(C)
+P.Properties.VariableNames = {'species', 'island', 'bill_length_mm',...
+'bill_depth_mm', 'flipper_length_mm', 'body_mass_g', 'sex','year'}
+%data의 개수가 8개이기 때문에 year 추가
+HeavyP = P(P.body_mass_g >= 4500, :)
+
+%(D)
+HeavyP(:, {'species','island','body_mass_g','sex'})
+
+%(E)
+LargeGentoo = P(strcmp(P.species,'Gentoo') & P.body_mass_g >= 5000, :)
+
+%문제10
+%(A)
+P;
+%(B)
+P.BillRatio = P.bill_length_mm ./ P.bill_depth_mm
+
+%(C)
+LongBill = P(P.BillRatio >= 2.8,:)
+
+%(D)
+LongBill(:,{'species', 'bill_length_mm', 'bill_depth_mm', 'BillRatio'})
+
+%(E)
+billRatioData = P{:, 'BillRatio'}
+
+%문제 11
+%(A)
+H = readtable('heart failure.csv')
+%(B)
+H.Properties.VariableNames
+
+%(C)
+HighRisk = H(H.age >= 70 & H.ejection_fraction <= 35, :)
+
+
+%(D)
+HighRisk = H(H.age >= 70 & H.ejection_fraction <= 35, :)
+
+%(E)
+DeathG = H(H.DEATH_EVENT == 1, :)
+SurvivalG = H(H.DEATH_EVENT == 0, :)
+
+
+
+%문제 12
+%(A)
+H;
+%(B)
+H.RiskScore = H.age ./ H.ejection_fraction + H.serum_creatinine
+
+%(C)
+RiskScoreGroup = H(H.RiskScore >= 4, :)
+
+%(D)
+RiskScoreGroup(:,{'age','ejection_fraction','serum_creatinine',...
+    'RiskScore','DEATH_EVENT'})
+%(E)
+writetable(RiskScoreGroup, 'heart_risk_group.csv')
+
+
+%문제13
+%(A)
+B = readtable('bank-full.csv')
+%(B)
+B.Properties.VariableNames
+%(C)
+B.age;
+B.balance;
+B.loan;
+B.y;
+
+%(D)
+T1 = B(B.age >= 40 & B.balance >= 2000 & strcmp(B.loan,'no'), :)
+
+%(E)
+T2 = T1(:, {'age','balance','y'})
+
+%(F)
+T2.NewFlag = double(strcmp(T2.y, 'yes'))
+
+%(G)
+Subscribed = T2(T2.NewFlag == 1, :)
+
+%(H)
+balanceVec = Subscribed{:, 'balance'}
+
+%(I)
+avgBalance = mean(balanceVec)
+
+%(j)
+writetable(Subscribed, 'bank_selected.csv')
