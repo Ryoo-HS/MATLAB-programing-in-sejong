@@ -1,0 +1,216 @@
+13주차 MATLAB과제
+문제1
+%(A)
+rng(13)
+%(B)
+p = 0.35 + 0.60 * rand(1, 40);
+%(C)
+d = rand(5000, 40);       
+r = d < p;
+%(D)
+total  = sum(r, 2);
+avg    = mean(total);
+sd     = std(total);
+%(E)
+figure
+histogram(total)
+above_avg = mean(total >= avg)
+
+문제2
+clc;clear;
+%(A)
+rng(42)
+p = 100 + 4 .* randn(10000, 20);
+
+%(B)
+avg_weight = mean(p, 2);
+%(C)
+fail = (avg_weight < 98) | (avg_weight > 102);
+%(D)
+fail_ratio = sum(fail)/length(fail)
+%(E)
+hist(avg_weight)
+xline(98, 'r--', 'LineWidth', 1.5, 'Label', '98');
+xline(102, 'r--', 'LineWidth', 1.5, 'Label', '102');
+
+문제3
+clc;clear;
+%(A)
+rng(42)
+n = randn(1,100000)
+%(B)
+s = 1.8 + n;
+%(C)
+s_1 = (s>=1.2)
+%(D)
+ratio = sum(s_1)/ length(s_1)
+per = ratio * 100
+%(E)
+hist(s)
+xline(1.2,'r--',LineWidth=2)
+
+문제4
+clc;clear;
+%(A)
+rng(42);
+orders = zeros(1, 365);
+for d = 1:365
+    L = exp(-180);
+    p = 1; k = 0;
+    while p > L
+        p = p * rand;
+        k = k + 1;
+    end
+    orders(d) = k - 1;
+end
+%(B)
+total_time = zeros(1, 365);
+for d = 1:365
+    t = randn(1, orders(d)) * 2 + 6;
+    t(t < 0) = 0;
+    total_time(d) = sum(t);
+end
+%(C)
+sum(total_time > 1200) / 365 * 100
+%(D)
+figure;
+subplot(2,1,1);
+plot(orders);
+subplot(2,1,2);
+plot(total_time);
+%(E)
+figure;
+scatter(orders, total_time);
+
+문제5
+clc;clear;
+%(A)
+rng(42);
+M = 25 + randn(10000, 30) * 0.8
+%(B)
+means = mean(M, 2)
+%(C)
+mean_in = (means >= 24.7) & (means <=25.3)
+%(D)
+ratio = sum(mean_in)/length(mean_in)
+%(E)
+subplot(2,1,1);
+hist(means);
+subplot(2,1,2);
+hist(M(:,1));
+
+문제6
+clc;clear;
+%(A)
+r = 0.0008 + 0.015 * randn(5000, 60)
+%(B)
+asset = zeros(5000, 60);
+asset(:,1) = 100 * (1 + r(:,1));
+for d = 2:60
+    asset(:,d) = asset(:,d-1) .* (1 + r(:,d));
+end
+%(C)
+avg_last = mean(asset(:,60))
+max_last = max(asset(:,60))
+min_last = min(asset(:,60))
+%(D)
+last_day = asset(:,60);
+last_100_under = last_day < 100
+ratio = sum(last_day < 100) / 5000
+%(E)
+figure;
+plot(asset(randperm(5000, 30), :)');
+
+문제7
+clc;clear;
+%(A)
+rng(42);
+inter = -8 * log(rand(1, 300))
+arrive = cumsum(inter)
+
+%(B)
+service = 10 + 3 * randn(1, 300)
+service(service < 0) = 1
+
+%(C)
+start_t = zeros(1, 300);
+end_t = zeros(1, 300);
+start_t(1) = arrive(1);
+end_t(1) = start_t(1) + service(1);
+for i = 2:300
+    start_t(i) = max(arrive(i), end_t(i-1));
+    end_t(i) = start_t(i) + service(i);
+end
+
+%(D)
+wait = start_t - arrive;
+
+%(E)
+mean(wait)
+max(wait)
+sum(wait > 20) / 300
+hist(wait);
+
+문제8
+clc;clear;
+%(A)
+r = rand(100000,5)
+%(B)
+p = [0.72 0.81 0.67 0.90 0.76];
+detect = r < p;
+%(C)
+total = sum(detect,2)
+%(D)
+success = total >= 3;
+sum(success) / 100000
+%(E)
+hist(total)
+
+문제9
+clc;clear;
+%(A)
+rng(42);
+r = rand(1,50000)
+r1 = r < 0.94
+%(B)
+r1_re = sum(r1)
+r2 = rand(1,r1_re)
+r2 = r2 < 0.91
+%(C)
+r2_re = sum(r2)
+r3 = rand(1,r2_re)
+r3 = r3 < 0.88
+result = sum(r3)
+%(D)
+ratio = result/50000
+%(E)
+fail1 = 50000 - r1_re
+fail2 = r1_re - r2_re
+fail3 = r2_re - result
+bar([fail1 fail2 fail3 result])
+
+문제10
+clc;clear;
+%(A)
+server = 35.*randn(1,10000)
+%(B)
+freeze = rand(1,10000) <= 0.12
+%(C)
+use = zeros(1,10000);
+for i = 1:10000
+    if freeze(i) == 0
+        use(i) = 500 + server(i);
+    elseif freeze(i) == 1
+        use(i) = 500 + server(i) + 120;
+    end
+end
+use
+%(D)
+use_over = use > 650
+ratio = sum(use_over)/10000
+%(E)
+hist(use)
+find(use_over == 1)
+hist(use)
+mean(use(freeze == 1))
+mean(use(freeze == 0))
